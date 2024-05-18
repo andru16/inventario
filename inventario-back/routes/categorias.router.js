@@ -5,7 +5,7 @@ const categoriasController = require('../controllers/gestion-inventarios/categor
 
 router.get('/', categoriasController.getCategorias);
 router.get('/:id', categoriasController.getCategoria);
-router.post('/', categoriasController.storeCategoria);
-router.put('/:id', categoriasController.updateCategoria);
+router.post('/guardar', categoriasController.storeCategoria);
+router.put('/actualizar/:id', categoriasController.updateCategoria);
 
 module.exports = router;

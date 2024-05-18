@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const port = 4000;
-const prefix = '/v1';
+const prefix = '/v1/soft-inventarios';
 
 app.use(urlencoded({ extended: true }));
 app.use(json());

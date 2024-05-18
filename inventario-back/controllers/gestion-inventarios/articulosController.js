@@ -2,6 +2,7 @@ const Articulo = require('../../models/Articulo')
 const Categoria = require('../../models/Categoria')
 const Inventario = require('../../models/Inventario')
 const Registro = require('../../models/Registro')
+const Proveedor = require('../../models/Proveedor')
 
 const getArticulos = async (req,res) => {
   try {
@@ -23,7 +24,7 @@ const  getArticulo = async (req,res) => {
   }
 }
 
-const storeArticulo = async () => {
+const storeArticulo = async (req,res) => {
   const {codigo,descripcion,existencias,existencias_minima,precio_compra,precio_venta,unidad_medida,proveedor_id,categoria_id} = req.body;
 
   try {
@@ -44,7 +45,7 @@ const updateArticulo = async (req,res) => {
   const {codigo,descripcion,existencias,existencias_minima,precio_compra,precio_venta,unidad_medida,proveedor_id,categoria_id} = req.body;
 
   try {
-    const articulo = Articulo.findById(id);
+    const articulo = await Articulo.findById(id);
 
     if(!articulo){
       return res.status(404).json({mensaje: "Articulo no encontrado!"});
@@ -59,10 +60,12 @@ const updateArticulo = async (req,res) => {
     if (unidad_medida) articulo.unidad_medida = unidad_medida;
     if (proveedor_id) articulo.proveedor_id = proveedor_id;
     if (categoria_id) articulo.categoria_id = categoria_id;
+
     await articulo.save();
 
     res.status(200).json({mensaje: "Articulo actualizado correctamente"});
   } catch (error) {
+    console.log(error)
     res.status(500).send({mensaje: error});
   }
 }

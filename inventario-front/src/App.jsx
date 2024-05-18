@@ -1,18 +1,37 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Layout from './components/plantilla/Layout'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+
+import Categorias from './pages/gestion-inventario/Categorias';
+import { Articulos } from './pages/gestion-inventario/Articulos';
+import NoFound from './pages/NoFound';
+import Login from './pages/Login';
+import Layout from './components/plantilla/Layout';
+import DashBoard from './pages/Dashboard';
+import { Proveedores } from './pages/gestion-inventario/Proveedores';
+import Inventario from './pages/gestion-inventario/Inventario';
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <Layout>
-        
-      </Layout>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route index path="/" element={<Login />} />
+
+        <Route path="/dashboard" element={<DashBoard />} />
+
+        {/* <Route path="administrador" element={<AdminPage />} /> */}
+        {/* <Route path="usuarios" element={<Usuarios />} /> */}
+        {/* <Route path="roles" element={<Roles />} /> */}
+        <Route path="/inventario" element={<Inventario />} />
+        <Route path="/articulos" element={<Articulos />} />
+        <Route path="/proveedores" element={<Proveedores />} />
+        <Route path="/categorias" element={<Categorias />} />
+
+        <Route path="*" element={<NoFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

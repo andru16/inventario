@@ -23,11 +23,11 @@ const articuloSchema = new mongoose.Schema({
     default:5
   },
   precio_compra:{
-    type:mongoose.Schema.Types.Decimal128,
+    type: String,
     required:true
   },
   precio_venta:{
-    type:mongoose.Schema.Types.Decimal128,
+    type: String,
     required:true
   },
   unidad_medida:{

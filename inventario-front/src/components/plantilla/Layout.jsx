@@ -1,55 +1,74 @@
-import React, { useEffect } from 'react';
-import '../../../public/recursos-plantilla/stylesheets/bootstrap4-alpha3.min.css';
-import '../../../public/recursos-plantilla/stylesheets/style.css';
-import '../../../public/recursos-plantilla/stylesheets/fullcalendar.min.css';
-import '../../../public/recursos-plantilla/stylesheets/fullcalendar.print.min.css';
-import '../../../public/recursos-plantilla/stylesheets/responsive.css';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '../../providers/AuthContext';
 
-const Layout = () => {
+const Layout = ({ children, menu_active }) => {
+  const [loading, setLoading] = useState(false);
+  const [proveedores, setProveedores] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [articulos, setArticulos] = useState([]);
+  const { userAuth, logout } = useAuth();
 
-    useEffect(() => {
-        const loadScript = (src) => {
-          return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-            document.body.appendChild(script);
-          });
-        };
-    
-        const scripts = [
-          '../../../public/recursos-plantilla/javascript/jquery.min.js',
-          '../../../public/recursos-plantilla/javascript/tether.min.js',
-          '../../../public/recursos-plantilla/javascript/bootstrap4-alpha3.min.js',
-          '../../../public/recursos-plantilla/javascript/ammap.js',
-          '../../../public/recursos-plantilla/javascript/worldLow.js',
-          '../../../public/recursos-plantilla/javascript/raphael.min.js',
-          '../../../public/recursos-plantilla/javascript/morris.min.js',
-          '../../../public/recursos-plantilla/javascript/Chart.min.js',
-          '../../../public/recursos-plantilla/javascript/moment.min.js',
-          '../../../public/recursos-plantilla/javascript/jquery-ui.js',
-          '../../../public/recursos-plantilla/javascript/fullcalendar.min.js',
-          '../../../public/recursos-plantilla/javascript/jquery.mCustomScrollbar.js',
-          '../../../public/recursos-plantilla/javascript/smoothscroll.js',
-          '../../../public/recursos-plantilla/javascript/waypoints.min.js',
-          '../../../public/recursos-plantilla/javascript/jquery-countTo.js',
-          '../../../public/recursos-plantilla/javascript/waves.min.js',
-          '../../../public/recursos-plantilla/javascript/canvasjs.min.js',
-          '../../../public/recursos-plantilla/javascript/main.js'
-        ];
-    
-        scripts.forEach(src => loadScript(src));
-      }, []);
+  const url_base = 'http://localhost:4000/v1/soft-inventarios/';
+
+  const location = useLocation();
+
+  // Cargar proveedores
+  const cargarProveedores = async () => {
+    let data = await fetch(`${url_base}proveedores`)
+      .then(data => data.json())
+      .then(res => res)
+    setProveedores(data);
+  }
+
+  // Cargar articulos
+  const cargarArticulos = async () => {
+    let data = await fetch(`${url_base}articulos`)
+      .then(data => data.json())
+      .then(res => res)
+    setArticulos(data);
+  }
+  // Cargar categorias
+  const cargarCategorias = async () => {
+    let data = await fetch(`${url_base}categorias`)
+      .then(data => data.json())
+      .then(res => res)
+    setCategorias(data);
+  }
+
+
+
+  useEffect(() => {
+
+    cargarProveedores();
+    cargarArticulos();
+    cargarCategorias();
+
+    console.log('----------------');
+    console.log('userAuth',userAuth);
+    console.log('----------------');
+
+    // Activar el loader al cambiar de ruta
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // ajusta este tiempo según la necesidad
+
+    return () => clearTimeout(timer); // Limpieza del timer
+  }, [location.pathname]); // Depende del cambio de ruta
 
   return (
     <div>
       {/* Loader */}
-      <div className="loader">
-        <div className="inner one"></div>
-        <div className="inner two"></div>
-        <div className="inner three"></div>
-      </div>
+      {loading && (
+        <div className="loader">
+          <div className="inner one"></div>
+          <div className="inner two"></div>
+          <div className="inner three"></div>
+        </div>
+      )}
 
       {/* Header */}
       <header id="header" className="header fixed">
@@ -57,7 +76,7 @@ const Layout = () => {
           <div className="curren-menu info-left">
             <div className="logo">
               <a href="index.html" title="">
-                <img src="images/logo.png" alt="One Admin" />
+                {/* <img src="images/logo.png" alt="One Admin" /> */}
               </a>
             </div>
             <div className="top-button">
@@ -70,8 +89,8 @@ const Layout = () => {
                 <img src="images/avatar/01.png" alt="" />
               </div>
               <div className="info">
-                <p className="name">STUARD ALEX</p>
-                <p className="address">San Francisco, CA</p>
+                <p className="name">{userAuth.nombres} {userAuth.apellidos}</p>
+                <p className="address">{userAuth.correo_electronico}</p>
               </div>
               <div className="arrow-down">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
@@ -92,34 +111,68 @@ const Layout = () => {
               <div className="img">
                 <img src="images/avatar/avatar-dashboard.png" alt="" />
               </div>
-              <div className="status-color blue heartbit style1"></div>
+              {/* <div className="status-color blue heartbit style1"></div> */}
             </a>
           </div>
           <ul className="user-options">
-            <li className="name"><a href="#" title="">STUARD ALEX</a></li>
-            <li className="options">ADMINISTRATOR</li>
+            <li className="name"><a href="#" title="">{userAuth.nombres.toUpperCase()} {userAuth.apellidos.toUpperCase()}</a></li>
+            <li className="options">{userAuth.rol.nombre}</li>
           </ul>
         </div>
         <ul className="sidebar-nav">
-          <li className="dashboard waves-effect waves-teal active">
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'inicio' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/monitor.png" alt="" />
             </div>
-            <span>DASHBOARD</span>
+            <Link to="/dashboard">
+              <span>DASHBOARD</span>
+            </Link>
           </li>
-          <li className="message waves-effect waves-teal">
+
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'inventario' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
-              <span>3</span>
+              {/* <span></span> */}
             </div>
-            <span>INVENTARIO</span>
+            <Link to="/inventario">
+              <span>INVENTARIO</span>
+            </Link>
+          </li>
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'articulos' ? 'active' : ''}`}>
+            <div className="img-nav">
+              <img src="images/icon/message.png" alt="" />
+              <span>{articulos.length}</span>
+            </div>
+            <Link to="/articulos">
+              <span>  ARTICULOS  </span>
+            </Link>
+          </li>
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
+            <div className="img-nav">
+              <img src="images/icon/message.png" alt="" />
+              <span>{categorias.length}</span>
+            </div>
+            <Link to="/categorias">
+              <span>  CATEGORIAS  </span>
+            </Link>
+          </li>
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
+            <div className="img-nav">
+              <img src="images/icon/message.png" alt="" />
+              <span>{proveedores.length}</span>
+            </div>
+            <Link to="/proveedores">
+              <span>  PROVEEDORES  </span>
+            </Link>
           </li>
         </ul>
       </section>
 
       {/* Main */}
-      <main>
-        <div className="d-flex div"></div>
+      <main className='open'>
+        <div className="d-flex div">
+          {children}
+        </div>
       </main>
     </div>
   );

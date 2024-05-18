@@ -224,12 +224,10 @@ input[type="color"],
 input[type="email"] {	
 	position: relative;
     width: 100%;
-    line-height: 20px;
-    padding: 15px 12px;
-    color: #898989;
-    border-radius: 30px;
+    line-height: 10px;
+    padding: 1px 12px;
     font-size: 12px;
-    height: 60px;
+    height: 35px;
     background-color: transparent;
 	-webkit-transition: all 0.3s ease-in-out;
 	   -moz-transition: all 0.3s ease-in-out;
@@ -239,9 +237,9 @@ input[type="email"] {
 }
 
 input[type="text"] {
-	border:  1px solid #2f3136;
-	height: 50px;
-	padding: 15px 30px;
+	height: 35px;
+	padding: 1px 12px;
+	width: 100%;
 }
 
 textarea:focus,
@@ -399,7 +397,7 @@ header {
 -------------------------------------------------------------- */
 .navbar-top {
 	position: relative;
-	z-index: 99999;
+	z-index: 10;
 	background: -webkit-linear-gradient(90deg, #202226, #18191c); /* For Safari 5.1 to 6.0 */
 	background: -o-linear-gradient(90deg, #202226, #18191c); /* For Opera 11.1 to 12.0 */
 	background: -moz-linear-gradient(90deg, #202226, #18191c); /* For Firefox 3.6 to 15 */
