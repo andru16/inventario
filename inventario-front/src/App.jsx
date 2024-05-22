@@ -26,7 +26,6 @@ function App() {
         {/* <Route path="roles" element={<Roles />} /> */}
         <Route path="/inventario" element={<Inventario />} />
         <Route path="/articulos" element={<Articulos />} />
-        <Route path="/proveedores" element={<Proveedores />} />
         <Route path="/categorias" element={<Categorias />} />
 
         <Route path="*" element={<NoFound />} />
