@@ -13,7 +13,7 @@ function routerApi(app) {
   app.use('/articulos', articulosRouter)
   app.use('/inventarios', inventarioRouter)
   app.use('/categorias', categoriaRouter)
-  app.use('/registro', registroRouter)
+  app.use('/registros', registroRouter)
   app.use('/proveedor', proveedorRouter)
   app.use('/usuario', usuarioRouter)
 }

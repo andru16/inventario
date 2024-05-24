@@ -1,65 +1,66 @@
 const Registro = require('../../models/Registro');
+const Articulo = require('../../models/Articulo');
 
 // Obtener todos los registros
 const getRegistros = async (req, res) => {
   try {
-    const registros = await Registro.find().populate('articulo');
+    const registros = await Registro.find({}).populate('articulos.articulo');
     res.status(200).json(registros);
   } catch (error) {
-    res.status(500).json({ mensaje: "Error al obtener los registros: " + error.message });
+    res.status(500).send({ mensaje: "Error al obtener registros: " + error.message });
   }
 };
 
-// Obtener un registro específico por ID
+// Obtener un registro específico
 const getRegistro = async (req, res) => {
   const { id } = req.params;
   try {
-    const registro = await Registro.findById(id).populate('articulo');
+    const registro = await Registro.findById(id).populate('articulos.articulo');
     if (!registro) {
-      return res.status(404).json({ mensaje: "Registro no encontrado." });
+      return res.status(404).send({ mensaje: "Registro no encontrado." });
     }
     res.status(200).json(registro);
   } catch (error) {
-    res.status(500).json({ mensaje: "Error al obtener el registro: " + error.message });
+    res.status(500).send({ mensaje: "Error al obtener el registro: " + error.message });
   }
 };
 
 // Crear un nuevo registro
 const storeRegistro = async (req, res) => {
-  const { articulo, tipo_movimiento, cantidad, descripcion } = req.body;
+  const { articulos, tipo_movimiento, descripcion } = req.body;
+  res
   try {
     const nuevoRegistro = new Registro({
-      articulo,
+      articulos,
       tipo_movimiento,
-      cantidad,
       descripcion
     });
     await nuevoRegistro.save();
-    res.status(201).json({ mensaje: "Registro creado correctamente", data: nuevoRegistro });
+    res.status(200).json({ mensaje: "Registro creado correctamente", data: nuevoRegistro });
   } catch (error) {
-    res.status(500).json({ mensaje: "Error al crear el registro: " + error.message });
+    res.status(500).send({ mensaje: "Error al crear el registro: " + error.message });
   }
 };
 
-// Actualizar un registro existente
+// Actualizar un registro
 const updateRegistro = async (req, res) => {
   const { id } = req.params;
-  const { tipo_movimiento, cantidad, descripcion } = req.body;
+  const { articulos, tipo_movimiento, descripcion } = req.body;
 
   try {
     const registro = await Registro.findById(id);
     if (!registro) {
-      return res.status(404).json({ mensaje: "Registro no encontrado." });
+      return res.status(404).send({ mensaje: "Registro no encontrado." });
     }
 
+    registro.articulos = articulos || registro.articulos;
     registro.tipo_movimiento = tipo_movimiento || registro.tipo_movimiento;
-    registro.cantidad = cantidad || registro.cantidad;
     registro.descripcion = descripcion || registro.descripcion;
 
     await registro.save();
     res.status(200).json({ mensaje: "Registro actualizado correctamente", data: registro });
   } catch (error) {
-    res.status(500).json({ mensaje: "Error al actualizar el registro: " + error.message });
+    res.status(500).send({ mensaje: "Error al actualizar el registro: " + error.message });
   }
 };
 

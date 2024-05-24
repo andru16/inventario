@@ -301,14 +301,14 @@ export const Articulos = () => {
                             <tbody>
                                 {articulos.map((articulo, i) =>
                                     <tr key={i}>
-                                        <td>{articulo.codigo}</td>
-                                        <td>{articulo.descripcion}</td>
-                                        <td>{articulo.existencias}</td>
-                                        <td>{articulo.existencias_minima}</td>
-                                        <td>{articulo.precio_compra}</td>
-                                        <td>{articulo.precio_venta}</td>
-                                        <td>{articulo.categoria.nombre}</td>
-                                        <td>{articulo.proveedor.nombre}</td>
+                                        <td className='text-center'>{articulo.codigo}</td>
+                                        <td className='text-center'>{articulo.descripcion}</td>
+                                        <td className='text-center'>{articulo.existencias}</td>
+                                        <td className='text-center'>{articulo.existencias_minima}</td>
+                                        <td className='text-center'>{articulo.precio_compra}</td>
+                                        <td className='text-center'>{articulo.precio_venta}</td>
+                                        <td className='text-center'>{articulo.proveedor.nombre}</td>
+                                        <td className='text-center'>{articulo.categoria.nombre}</td>
                                         <td className="text-center">
                                             <div className="btn-group">
                                                 <button

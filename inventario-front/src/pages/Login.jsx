@@ -37,8 +37,8 @@ function Login({ callback }) {
       .then(res => {
 
         login(res)
-        const redirectRoute = res.rol.nombre === "administrador" ? "/dashboard" :
-          res.rol.nombre === "compras" ? "/compras" : "/almacen";
+        const redirectRoute = res.rol === "administrador" ? "/dashboard" :
+          res.rol === "compras" ? "/compras" : "/almacen";
         goTo(redirectRoute)
 
         Swal.fire({

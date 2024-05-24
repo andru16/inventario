@@ -17,9 +17,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route index path="/" element={<Login />} /> */}
+        <Route index path="/" element={<Login />} />
 
-        <Route index path="/dashboard" element={<DashBoard />} />
+        <Route path="/dashboard" element={<DashBoard />} />
 
         {/* <Route path="administrador" element={<AdminPage />} /> */}
         {/* <Route path="usuarios" element={<Usuarios />} /> */}

@@ -3,120 +3,290 @@ import Layout from '../../components/plantilla/Layout';
 import Modal from '../../components/plantilla/Modal';
 import Swal from 'sweetalert2';
 
-export const Inventario = () => {
-    const [inventarios, setInventarios] = useState([]);
+const Inventario = () => {
+
+    // Definicion de hooks
     const [isModalOpen, setModalOpen] = useState(false);
     const [articulos, setArticulos] = useState([]);
-    const [selectedArticulo, setSelectedArticulo] = useState('');
-    const [cantidad, setCantidad] = useState('');
-    const [method, setMethod] = useState('POST');
-    const url_base = 'http://localhost:4000/v1/soft-inventarios/inventarios/';
+    const [registros, setRegistros] = useState([]);
+    const [articulosSeleccionados, setArticulosSeleccionados] = useState([]);
+    const url_base = 'http://localhost:4000/v1/soft-inventarios/';
 
-    const toggleModal = () => setModalOpen(!isModalOpen);
+    const [method, setMethod] = useState('');
+    const [tituloModal, setTituloModal] = useState('');
+    const [urlEnviar, setUrlEnviar] = useState('');
 
-    const handleInputChange = (event) => {
+    const [tipoMovimiento, setTipoMovimiento] = useState('entrada');
+    const [fecha, setFecha] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+
+    //funciones
+    const toggleModal = () => { 
+        setModalOpen(!isModalOpen); 
+    };
+
+    const handleChange = (event) => {
         const { name, value } = event.target;
-        if (name === 'selectedArticulo') setSelectedArticulo(value);
-        else if (name === 'cantidad') setCantidad(value);
-    };
-
-    const cargarInventarios = async () => {
-        try {
-            const response = await fetch(`${url_base}`);
-            const data = await response.json();
-            setInventarios(data);
-        } catch (error) {
-            Swal.fire('Error', `Error al cargar los inventarios: ${error}`, 'error');
+        switch (name) {
+            case 'tipo_movimiento':
+                setTipoMovimiento(value);
+                break;
+            case 'fecha':
+                setFecha(value);
+                break;
+            case 'descripcion':
+                setDescripcion(value);
+                break;
+            default:
+                break;
         }
     };
 
+    const agregarRegistro = () => {
+        setTituloModal("Agregar Nuevo Registro");
+        setMethod('POST');
+        setUrlEnviar(`${url_base}registros/guardar`);
+        toggleModal();
+    };
+
+    const actualizarRegistro = async (registro) => {
+        setTipoMovimiento(registro.tipo_movimiento);
+        setFecha(new Date(registro.fecha).toISOString().split('T')[0]);
+        setDescripcion(registro.descripcion);
+        setArticulosSeleccionados(registro.articulos.map(item => ({
+            articulo: item.articulo._id,
+            cantidad: item.cantidad
+        })));
+
+        setUrlEnviar(`${url_base}registros/${registro._id}`);
+        setTituloModal('Actualizar Registro');
+        setMethod('PUT');
+        toggleModal();
+    };
+
+    // Cargar registros
+    const cargarRegistros = async () => {
+        let data = await fetch(`${url_base}registros`)
+            .then(data => data.json())
+            .then(res => res);
+        setRegistros(data);
+    };
+
+    // Cargar artículos
     const cargarArticulos = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/v1/soft-inventarios/articulos');
-            const data = await response.json();
-            setArticulos(data);
-        } catch (error) {
-            Swal.fire('Error', `Error al cargar artículos: ${error}`, 'error');
-        }
+        let data = await fetch(`${url_base}articulos`)
+            .then(data => data.json())
+            .then(res => res);
+        setArticulos(data);
     };
 
-    const guardarInventario = async (e) => {
+    const agregarArticuloSeleccionado = () => {
+        setArticulosSeleccionados([...articulosSeleccionados, { articulo: '', cantidad: 0 }]);
+    };
+
+    const handleArticuloSeleccionadoChange = (index, field, value) => {
+        const nuevosArticulosSeleccionados = [...articulosSeleccionados];
+        nuevosArticulosSeleccionados[index][field] = value;
+        setArticulosSeleccionados(nuevosArticulosSeleccionados);
+    };
+
+    const guardarInformacion = async (e) => {
         e.preventDefault();
-        try {
-            const body = JSON.stringify({
-                articulos: [{ articulo: selectedArticulo, cantidad: parseInt(cantidad, 10) }]
+
+        let datos = {
+            articulos: articulosSeleccionados,
+            tipo_movimiento: tipoMovimiento,
+            fecha: fecha,
+            descripcion: descripcion
+        };
+
+        fetch(urlEnviar, {
+            method: method,
+            body: JSON.stringify(datos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => res.json())
+            .catch((error) => {
+                Swal.fire({
+                    title: '',
+                    text: `Ha ocurrido un error ${error}`,
+                    icon: 'error',
+                    confirmButtonText: 'Cerrar'
+                });
+            })
+            .then((response) => {
+                Swal.fire({
+                    title: '',
+                    text: `${response.mensaje}`,
+                    icon: 'success',
+                    confirmButtonText: 'Cerrar'
+                });
+                limpiarCampos();
+                cargarRegistros();
+                toggleModal();
             });
-            const response = await fetch(`${url_base}`, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            });
-            const result = await response.json();
-            Swal.fire('Éxito', result.mensaje, 'success');
-            cargarInventarios();
-            toggleModal();
-        } catch (error) {
-            Swal.fire('Error', `Error al guardar el inventario: ${error}`, 'error');
-        }
+    };
+
+    const limpiarCampos = () => {
+        setArticulosSeleccionados([]);
+        setTipoMovimiento('entrada');
+        setFecha('');
+        setDescripcion('');
+
+        setUrlEnviar('');
+        setTituloModal('');
+        setMethod('');
     };
 
     useEffect(() => {
-        cargarInventarios();
+        cargarRegistros();
         cargarArticulos();
     }, []);
 
     return (
-        <Layout menu_active="inventario">
-            <div className="rows col-md-12">
+        <Layout menu_active="registros">
+            <div className="rows col-md-12 col-xl-12">
                 <div className="box box-danger">
                     <div className="box-content">
-                        <button onClick={() => { setMethod('POST'); toggleModal(); }} className="btn btn-primary">
-                            Agregar al Inventario
-                        </button>
-                        <table className="">
+
+                        <div className='row mb-5'>
+                            <div className="col-md-3">
+                                <button onClick={agregarRegistro} className='btn btn-primary'>
+                                    <i className="zmdi zmdi-collection-plus mr-2"></i>
+                                    Agregar Registro
+                                </button>
+                            </div>
+                        </div>
+
+                        <table className="" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Artículo</th>
-                                    <th>Cantidad</th>
-                                    <th>Última Actualización</th>
+                                    <th className='text-center'>Artículos</th>
+                                    <th className='text-center'>Tipo Movimiento</th>
+                                    <th className='text-center'>Fecha</th>
+                                    <th className='text-center'>Descripción</th>
+                                    <th className='text-center'></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {inventarios.map((inv) => (
-                                    <tr key={inv._id}>
-                                        <table>
-                                            <tbody>
-                                                {inv.articulos.map((art) =>
-                                                    <tr>
-                                                        <td key={art._id}>{art.articulo.descripcion} - {art.articulo.codigo}</td>
-                                                        <td>{art.cantidad}</td>
-                                                        <td>{new Date(inv.fecha_actualizacion).toLocaleDateString()}</td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </table>
+                                {registros.map((registro, i) =>
+                                    <tr key={i}>
+                                        <td>
+                                            {registro.articulos.map((item, idx) => (
+                                                <div key={idx}>{item.articulo.codigo} - Cantidad: {item.cantidad}</div>
+                                            ))}
+                                        </td>
+                                        <td>{registro.tipo_movimiento}</td>
+                                        <td>{new Date(registro.fecha).toLocaleDateString()}</td>
+                                        <td>{registro.descripcion}</td>
+                                        <td className="text-center">
+                                            <div className="btn-group">
+                                                <button
+                                                    type='button'
+                                                    className='btn btn-info pt-0 pb-0 px-1 text-white'
+                                                    onClick={() => actualizarRegistro(registro)}
+                                                >
+                                                    <i className="fa-regular fa-pen-to-square"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalOpen} onClose={toggleModal} title={method === 'POST' ? 'Agregar Inventario' : 'Actualizar Inventario'}>
-                <form onSubmit={guardarInventario}>
-                    <div className="form-group">
-                        <label htmlFor="selectedArticulo">Artículo</label>
-                        <select className="form-control" name="selectedArticulo" value={selectedArticulo} onChange={handleInputChange} required>
-                            {articulos.map((articulo) => (
-                                <option key={articulo._id} value={articulo._id}>{articulo.descripcion}</option>
-                            ))}
-                        </select>
+
+            {/* Modales */}
+            <Modal isOpen={isModalOpen} onClose={toggleModal} title={tituloModal}>
+                <form onSubmit={guardarInformacion} className="form">
+                    {articulosSeleccionados.map((item, index) => (
+                        <div key={index} className="row my-2">
+                            <div className="col-md-6">
+                                <label>Artículo</label>
+                                <select
+                                    name="articulo"
+                                    value={item.articulo}
+                                    onChange={(e) => handleArticuloSeleccionadoChange(index, 'articulo', e.target.value)}
+                                    required
+                                    className='form-control'
+                                >
+                                    <option value="">Seleccione un artículo</option>
+                                    {articulos.map((articulo) => (
+                                        <option key={articulo._id} value={articulo._id}>{articulo.descripcion}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-md-6">
+                                <label>Cantidad</label>
+                                <input
+                                    type="number"
+                                    name="cantidad"
+                                    value={item.cantidad}
+                                    onChange={(e) => handleArticuloSeleccionadoChange(index, 'cantidad', e.target.value)}
+                                    required
+                                    className='form-control'
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    <div className="row my-3">
+                        <div className="col-md-12">
+                            <button type="button" className="btn btn-secondary" onClick={agregarArticuloSeleccionado}>Agregar Artículo</button>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="cantidad">Cantidad</label>
-                        <input type="number" className="form-control" name="cantidad" value={cantidad} onChange={handleInputChange} required />
+
+                    <div className="row my-1">
+                        <div className="col-md-12">
+                            <label>Tipo de Movimiento</label>
+                            <select
+                                name="tipo_movimiento"
+                                value={tipoMovimiento}
+                                onChange={handleChange}
+                                required
+                                className='form-control'
+                            >
+                                <option value="entrada">Entrada</option>
+                                <option value="salida">Salida</option>
+                            </select>
+                        </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Guardar</button>
+
+                    <div className="row my-2">
+                        <div className="col-md-12">
+                            <label>Fecha</label>
+                            <input
+                                type="date"
+                                name="fecha"
+                                value={fecha}
+                                onChange={handleChange}
+                                required
+                                className='form-control'
+                            />
+                        </div>
+                    </div>
+
+                    <div className="row my-1">
+                        <div className="col-md-12">
+                            <label>Descripción</label>
+                            <textarea
+                                name="descripcion"
+                                value={descripcion}
+                                onChange={handleChange}
+                                className='form-control'
+                            >
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div className="row justify-content-center">
+                        <div>
+                            <button type="submit" className="btn btn-primary my-2">Guardar Registro</button>
+                        </div>
+                    </div>
                 </form>
             </Modal>
         </Layout>

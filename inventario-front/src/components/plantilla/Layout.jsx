@@ -8,7 +8,7 @@ const Layout = ({ children, menu_active }) => {
   const [proveedores, setProveedores] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [articulos, setArticulos] = useState([]);
-  // const { userAuth, logout } = useAuth();
+  const { userAuth, logout } = useAuth();
 
   const url_base = 'http://localhost:4000/v1/soft-inventarios/';
 
@@ -41,7 +41,7 @@ const Layout = ({ children, menu_active }) => {
 
   useEffect(() => {
 
-    cargarProveedores();
+    // cargarProveedores();
     cargarArticulos();
     cargarCategorias();
 
@@ -146,7 +146,7 @@ const Layout = ({ children, menu_active }) => {
               <span>  ARTICULOS  </span>
             </Link>
           </li>
-          <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
+          {/* <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
               <span>{categorias.length}</span>
@@ -154,7 +154,7 @@ const Layout = ({ children, menu_active }) => {
             <Link to="/categorias">
               <span>  CATEGORIAS  </span>
             </Link>
-          </li>
+          </li> */}
           <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
