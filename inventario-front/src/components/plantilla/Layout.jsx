@@ -8,7 +8,7 @@ const Layout = ({ children, menu_active }) => {
   const [proveedores, setProveedores] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [articulos, setArticulos] = useState([]);
-  const { userAuth, logout } = useAuth();
+  // const { userAuth, logout } = useAuth();
 
   const url_base = 'http://localhost:4000/v1/soft-inventarios/';
 
@@ -46,7 +46,6 @@ const Layout = ({ children, menu_active }) => {
     cargarCategorias();
 
     console.log('----------------');
-    console.log('userAuth',userAuth);
     console.log('----------------');
 
     // Activar el loader al cambiar de ruta
@@ -89,8 +88,8 @@ const Layout = ({ children, menu_active }) => {
                 <img src="images/avatar/01.png" alt="" />
               </div>
               <div className="info">
-                <p className="name">{userAuth.nombres} {userAuth.apellidos}</p>
-                <p className="address">{userAuth.correo_electronico}</p>
+                {/* <p className="name">{userAuth.nombres} {userAuth.apellidos}</p>
+                <p className="address">{userAuth.correo_electronico}</p> */}
               </div>
               <div className="arrow-down">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
@@ -115,8 +114,8 @@ const Layout = ({ children, menu_active }) => {
             </a>
           </div>
           <ul className="user-options">
-            <li className="name"><a href="#" title="">{userAuth.nombres.toUpperCase()} {userAuth.apellidos.toUpperCase()}</a></li>
-            <li className="options">{userAuth.rol.nombre}</li>
+            {/* <li className="name"><a href="#" title="">{userAuth.nombres.toUpperCase()} {userAuth.apellidos.toUpperCase()}</a></li>
+            <li className="options">{userAuth.rol.nombre}</li> */}
           </ul>
         </div>
         <ul className="sidebar-nav">
@@ -163,6 +162,15 @@ const Layout = ({ children, menu_active }) => {
             </div>
             <Link to="/proveedores">
               <span>  PROVEEDORES  </span>
+            </Link>
+          </li>
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'usuarios' ? 'active' : ''}`}>
+            <div className="img-nav">
+              <img src="images/icon/message.png" alt="" />
+              <span>{proveedores.length}</span>
+            </div>
+            <Link to="/usuarios">
+              <span>  USUARIOS  </span>
             </Link>
           </li>
         </ul>

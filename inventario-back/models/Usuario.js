@@ -21,8 +21,7 @@ const usuarioSchema = new mongoose.Schema({
     required: true,
   },
   rol:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Role',
+    type: String,
     required: true,
   }
 })

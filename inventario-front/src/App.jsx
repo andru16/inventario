@@ -8,7 +8,7 @@ import NoFound from './pages/NoFound';
 import Login from './pages/Login';
 import Layout from './components/plantilla/Layout';
 import DashBoard from './pages/Dashboard';
-import { Proveedores } from './pages/gestion-inventario/Proveedores';
+// import { Proveedores } from './pages/gestion-inventario/Proveedores';
 import Inventario from './pages/gestion-inventario/Inventario';
 
 
@@ -17,9 +17,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index path="/" element={<Login />} />
+        {/* <Route index path="/" element={<Login />} /> */}
 
-        <Route path="/dashboard" element={<DashBoard />} />
+        <Route index path="/dashboard" element={<DashBoard />} />
 
         {/* <Route path="administrador" element={<AdminPage />} /> */}
         {/* <Route path="usuarios" element={<Usuarios />} /> */}
