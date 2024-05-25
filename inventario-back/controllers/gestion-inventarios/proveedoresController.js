@@ -28,7 +28,7 @@ const listarProveedor = async (req, res) => {
         nit, razon_social, correo_electronico, telefono,direccion, ciudad 
       });
       await nuevoProveedor.save();
-      res.status(201).json({ mensaje: "Proveedor creado correctamente", data: nuevoProveedor });
+      res.status(200).json({ mensaje: "Proveedor creado correctamente"});
     } catch (error) {
       res.status(500).json({ mensaje: "Error al crear el proveedor: " + error.message });
     }
@@ -39,22 +39,14 @@ const listarProveedor = async (req, res) => {
     const { nit, razon_social, correo_electronico, telefono,direccion, ciudad } = req.body;
 
     try {
-        if (!ObjectId.isValid(id)) {
-            return res.status(400).json({ mensaje: "el ID de proveedor no es válido" });
-        }
 
         const actProveedor = await Proveedor.findById(id)
-
-        if (!actProveedor) {
-            return res.status(404).json({ mensaje: "Proveedor no encontrado" });
-        }
-
-        
-    if (nit) actUsuario.nit = nit;
-    if (razon_social) actUsuario.razon_social = razon_social;
-    if (correo_electronico) actUsuario.correo_eletronico = correo_electronico;
-    if (telefono) actUsuario.telefono = telefono;
-    if (direccion) actUsuario.direccion= direccion;
+   
+    if (nit) actProveedor.nit = nit;
+    if (razon_social) actProveedor.razon_social = razon_social;
+    if (correo_electronico) actProveedor.correo_electronico = correo_electronico;
+    if (telefono) actProveedor.telefono = telefono;
+    if (direccion) actProveedor.direccion= direccion;
 
     await actProveedor.save();
 

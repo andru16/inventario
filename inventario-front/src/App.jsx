@@ -10,6 +10,7 @@ import Layout from './components/plantilla/Layout';
 import DashBoard from './pages/Dashboard';
 // import { Proveedores } from './pages/gestion-inventario/Proveedores';
 import Inventario from './pages/gestion-inventario/Inventario';
+import Proveedores from './pages/gestion-inventario/Proveedores';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/inventario" element={<Inventario />} />
         <Route path="/articulos" element={<Articulos />} />
         <Route path="/categorias" element={<Categorias />} />
+        <Route path="/proveedores" element={<Proveedores />} />
 
         <Route path="*" element={<NoFound />} />
       </Routes>

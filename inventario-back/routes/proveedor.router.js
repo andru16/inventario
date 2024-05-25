@@ -4,8 +4,8 @@ const proveedoresController = require('../controllers/gestion-inventarios/provee
 
 
 router.get('/', proveedoresController.listarProveedor);
-router.get('/:id', proveedoresController.TraerProveedor);
-router.post('/', proveedoresController.crearProveedor);
-router.put('/:id', proveedoresController.actualizarProveedor);
+router.get('/:id', proveedoresController.traerProveedor);
+router.post('/crear', proveedoresController.crearProveedor);
+router.put('/actualizar/:id', proveedoresController.actualizarProveedor);
 
 module.exports = router;
