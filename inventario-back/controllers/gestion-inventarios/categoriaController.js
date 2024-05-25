@@ -26,7 +26,7 @@ const storeCategoria = async (req,res) => {
   try {
     const categoria = new Categoria({nombre, descripcion});
     await categoria.save();
-    res.status(200).json({mensaje: 'Categoria creada corecctamente'});
+    res.status(200).json({mensaje: 'Categoria creada correctamente'});
   } catch (error) {
     res.status(500).json({mensaje: error});
   }

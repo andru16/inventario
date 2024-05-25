@@ -137,7 +137,7 @@ export const Articulos = () => {
     }
     // Cargar proveedores
     const cargarProveedores = async () => {
-        let data = await fetch(`${url_base}proveedores`)
+        let data = await fetch(`${url_base}proveedor`)
             .then(data => data.json())
             .then(res => res)
         setProveedores(data);
@@ -287,29 +287,29 @@ export const Articulos = () => {
                         <table className="" width="100%">
                             <thead>
                                 <tr>
-                                    <th className='text-center'>Codigo</th>
-                                    <th className='text-center'>Descripcion</th>
-                                    <th className='text-center'>Existencias</th>
-                                    <th className='text-center'>Existencias Minimas</th>
-                                    <th className='text-center'>P. Compra</th>
-                                    <th className='text-center'>P. Venta</th>
-                                    <th className='text-center'>Proveedor</th>
-                                    <th className='text-center'>Categoria</th>
-                                    <th className='text-center'></th>
+                                    <th className='text-center pb-2'>Codigo</th>
+                                    <th className='text-center pb-2'>Descripcion</th>
+                                    <th className='text-center pb-2'>Existencias</th>
+                                    <th className='text-center pb-2'>Existencias Minimas</th>
+                                    <th className='text-center pb-2'>P. Compra</th>
+                                    <th className='text-center pb-2'>P. Venta</th>
+                                    <th className='text-center pb-2'>Proveedor</th>
+                                    <th className='text-center pb-2'>Categoria</th>
+                                    <th className='text-center pb-2'></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {articulos.map((articulo, i) =>
                                     <tr key={i}>
-                                        <td className='text-center'>{articulo.codigo}</td>
-                                        <td className='text-center'>{articulo.descripcion}</td>
-                                        <td className='text-center'>{articulo.existencias}</td>
-                                        <td className='text-center'>{articulo.existencias_minima}</td>
-                                        <td className='text-center'>{articulo.precio_compra}</td>
-                                        <td className='text-center'>{articulo.precio_venta}</td>
-                                        <td className='text-center'>{articulo.proveedor.nombre}</td>
-                                        <td className='text-center'>{articulo.categoria.nombre}</td>
-                                        <td className="text-center">
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.codigo}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.descripcion}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.existencias}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.existencias_minima}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.precio_compra}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.precio_venta}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.proveedor.nombre}</td>
+                                        <td className='text-center border-bottom pt-0 pb-2'>{articulo.categoria.nombre}</td>
+                                        <td className="text-center border-bottom pt-0 pb-2">
                                             <div className="btn-group">
                                                 <button
                                                     type='button'

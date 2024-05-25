@@ -163,25 +163,25 @@ const Inventario = () => {
                         <table className="" width="100%">
                             <thead>
                                 <tr>
-                                    <th className='text-center'>Artículos</th>
-                                    <th className='text-center'>Tipo Movimiento</th>
-                                    <th className='text-center'>Fecha</th>
-                                    <th className='text-center'>Descripción</th>
-                                    <th className='text-center'></th>
+                                    <th className='text-left pb-2'>Artículos</th>
+                                    <th className='text-left pb-2'>Tipo Movimiento</th>
+                                    <th className='text-left pb-2'>Fecha</th>
+                                    <th className='text-left pb-2'>Descripción</th>
+                                    <th className='text-left pb-2'></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {registros.map((registro, i) =>
                                     <tr key={i}>
-                                        <td>
+                                        <td className='border-bottom pt-0 pb-2'>
                                             {registro.articulos.map((item, idx) => (
                                                 <div key={idx}>{item.articulo.codigo} - Cantidad: {item.cantidad}</div>
                                             ))}
                                         </td>
-                                        <td>{registro.tipo_movimiento}</td>
-                                        <td>{new Date(registro.fecha).toLocaleDateString()}</td>
-                                        <td>{registro.descripcion}</td>
-                                        <td className="text-center">
+                                        <td className='border-bottom pt-0 pb-2'>{registro.tipo_movimiento}</td>
+                                        <td className='border-bottom pt-0 pb-2'>{new Date(registro.fecha).toLocaleDateString()}</td>
+                                        <td className='border-bottom pt-0 pb-2'>{registro.descripcion}</td>
+                                        <td className="text-center border-bottom pt-0 pb-2">
                                             <div className="btn-group">
                                                 <button
                                                     type='button'

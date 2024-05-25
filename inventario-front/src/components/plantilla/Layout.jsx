@@ -6,6 +6,7 @@ import { useAuth } from '../../providers/AuthContext';
 const Layout = ({ children, menu_active }) => {
   const [loading, setLoading] = useState(false);
   const [proveedores, setProveedores] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [articulos, setArticulos] = useState([]);
   const { userAuth, logout } = useAuth();
@@ -16,7 +17,7 @@ const Layout = ({ children, menu_active }) => {
 
   // Cargar proveedores
   const cargarProveedores = async () => {
-    let data = await fetch(`${url_base}proveedores`)
+    let data = await fetch(`${url_base}proveedor`)
       .then(data => data.json())
       .then(res => res)
     setProveedores(data);
@@ -37,6 +38,14 @@ const Layout = ({ children, menu_active }) => {
     setCategorias(data);
   }
 
+  const cargarUsuarios = async () => {
+    let data = await fetch(`${url_base}usuario`)
+      .then(data => data.json())
+      .then(res => res);
+    setUsuarios(data);
+  };
+
+
 
 
   useEffect(() => {
@@ -44,6 +53,8 @@ const Layout = ({ children, menu_active }) => {
     // cargarProveedores();
     cargarArticulos();
     cargarCategorias();
+    cargarUsuarios();
+    cargarProveedores();
 
     console.log('----------------');
     console.log('----------------');
@@ -88,8 +99,8 @@ const Layout = ({ children, menu_active }) => {
                 <img src="images/avatar/01.png" alt="" />
               </div>
               <div className="info">
-                {/* <p className="name">{userAuth.nombres} {userAuth.apellidos}</p>
-                <p className="address">{userAuth.correo_electronico}</p> */}
+                <p className="name">{userAuth.nombres} {userAuth.apellidos}</p>
+                <p className="address">{userAuth.correo_electronico}</p>
               </div>
               <div className="arrow-down">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
@@ -114,8 +125,8 @@ const Layout = ({ children, menu_active }) => {
             </a>
           </div>
           <ul className="user-options">
-            {/* <li className="name"><a href="#" title="">{userAuth.nombres.toUpperCase()} {userAuth.apellidos.toUpperCase()}</a></li>
-            <li className="options">{userAuth.rol.nombre}</li> */}
+            <li className="name"><a href="#" title="">{userAuth.nombres.toUpperCase()} {userAuth.apellidos.toUpperCase()}</a></li>
+            <li className="options">{userAuth.rol.nombre}</li>
           </ul>
         </div>
         <ul className="sidebar-nav">
@@ -154,8 +165,13 @@ const Layout = ({ children, menu_active }) => {
             <Link to="/categorias">
               <span>  CATEGORIAS  </span>
             </Link>
-          </li> */}
+
           <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
+
+          </li>
+          </li> */}
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'proveedor' ? 'active' : ''}`}>
+
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
               <span>{proveedores.length}</span>
@@ -167,7 +183,7 @@ const Layout = ({ children, menu_active }) => {
           <li className={`dashboard waves-effect waves-teal ${menu_active == 'usuarios' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
-              <span>{proveedores.length}</span>
+              <span>{usuarios.length}</span>
             </div>
             <Link to="/usuarios">
               <span>  USUARIOS  </span>

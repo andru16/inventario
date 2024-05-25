@@ -9,6 +9,8 @@ const DashBoard = () => {
 
     const [articulos, setArticulos] = useState([]);
     const [registros, setRegistros] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
+    const [proveedores, setProveedores] = useState([]);
     const [estadisticas, setEstadisticas] = useState({ totalArticulos: 0, totalRegistros: 0 });
 
     const url_base = 'http://localhost:4000/v1/soft-inventarios/';
@@ -45,9 +47,29 @@ const DashBoard = () => {
         }
     };
 
+    const cargarUsuarios = async () => {
+        let data = await fetch(`${url_base}usuario`)
+            .then(data => data.json())
+            .then(res => res);
+        setUsuarios(data);
+        setEstadisticas(prev => ({ ...prev, totalUsuarios: data.length }));
+    };
+
+    const cargarProveedores = async () => {
+        let data = await fetch(`${url_base}proveedor`)
+          .then((data) => data.json())
+          .then((res) => res);
+        setProveedores(data);
+        setEstadisticas(prev => ({ ...prev, totalProveedores: data.length }));
+      };
+    
+
+
     useEffect(() => {
         cargarArticulos();
         cargarRegistros();
+        cargarUsuarios();
+        cargarProveedores();
     }, []);
 
     return (
@@ -57,7 +79,7 @@ const DashBoard = () => {
                     <div className="box-content">
 
                         <div className="row">
-                            <div className="col-md-6 col-xl-4">
+                            <div className="col-md-3 col-xl-3">
                                 <div className="card shadow-sm mb-4 border">
                                     <div className="card-body d-flex align-items-center">
                                         <i className="fa-solid fa-boxes-stacked fa-3x me-3"></i>
@@ -68,13 +90,36 @@ const DashBoard = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-6 col-xl-4">
+                            <div className="col-md-3 col-xl-3">
                                 <div className="card shadow-sm mb-4 border">
                                     <div className="card-body d-flex align-items-center">
                                         <i className="fa-solid fa-file-invoice-dollar fa-3x me-3"></i>
                                         <div>
-                                            <h5 className="card-title">Total de Registros</h5>
+                                            <h5 className="card-title">Total de Movimientos</h5>
                                             <p className="card-text">{estadisticas.totalRegistros}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-3 col-xl-3">
+                                <div className="card shadow-sm mb-4 border">
+                                    <div className="card-body d-flex align-items-center">
+                                        
+                                        <i className="fa-solid fa-users fa-3x me-3"></i>
+                                        <div>
+                                            <h5 className="card-title">Total de Usuarios</h5>
+                                            <p className="card-text">{estadisticas.totalUsuarios}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-3 col-xl-3">
+                                <div className="card shadow-sm mb-4 border">
+                                    <div className="card-body d-flex align-items-center">
+                                        <i className="fa-solid fa-people-carry-box fa-2x me-3"></i>
+                                        <div>
+                                            <h5 className="card-title">Total de Proveedores</h5>
+                                            <p className="card-text">{estadisticas.totalProveedores}</p>
                                         </div>
                                     </div>
                                 </div>
