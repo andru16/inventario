@@ -16,7 +16,7 @@ const Layout = ({ children, menu_active }) => {
 
   // Cargar proveedores
   const cargarProveedores = async () => {
-    let data = await fetch(`${url_base}proveedores`)
+    let data = await fetch(`${url_base}proveedor`)
       .then(data => data.json())
       .then(res => res)
     setProveedores(data);
@@ -41,7 +41,7 @@ const Layout = ({ children, menu_active }) => {
 
   useEffect(() => {
 
-    // cargarProveedores();
+    cargarProveedores();
     cargarArticulos();
     cargarCategorias();
 
@@ -154,8 +154,10 @@ const Layout = ({ children, menu_active }) => {
             <Link to="/categorias">
               <span>  CATEGORIAS  </span>
             </Link>
+
           </li> */}
-          <li className={`dashboard waves-effect waves-teal ${menu_active == 'categorias' ? 'active' : ''}`}>
+    
+          <li className={`dashboard waves-effect waves-teal ${menu_active == 'proveedor' ? 'active' : ''}`}>
             <div className="img-nav">
               <img src="images/icon/message.png" alt="" />
               <span>{proveedores.length}</span>
