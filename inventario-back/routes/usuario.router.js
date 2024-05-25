@@ -4,8 +4,8 @@ const usuariosController = require('../controllers/gestion-inventarios/usuariosC
 
 
 router.get('/', usuariosController.listarUsuarios);
-router.get('/:id', usuariosController.traerUsuario);
-router.post('/', usuariosController.crearUsuario);
-router.put('/:id', usuariosController.actualizarUsuario);
+router.get('/:listar-usuarios', usuariosController.traerUsuario);
+router.post('/crear-usuario', usuariosController.crearUsuario);
+router.put('/editar-usuario/:id', usuariosController.actualizarUsuario);
 
 module.exports = router;
